@@ -1,6 +1,13 @@
 # Study progress
 
-Updated: 28 October 2026
+Updated: 29 October 2026
+
+## Day 5 opening Day 4 repair — 29 October 2026
+
+- Began the additional 25-minute Day 4 repair before the full Day 5 curriculum. This adds study time; the spectral bridge, core readings, derivations, small-matrix diagnostic, illustration, annotated update, and exit test remain pending in their planned order.
+- On the scalar example `f(u)=1/2(u+1)^2`, `C=[0,2]`, `x=1`, user independently found the LMO point `s=0` and gap `G_FW(1)=2` (score 2), then independently explained that moving toward `s=0` lowers the objective (score 2). Clarification: the gap gives a first-order decrease; curvature governs the finite step. This is one session's independent evidence, not two separated checks of the full gap proof.
+- For `x_next=1-γ`, user initially expanded the objective change as `γ(γ-2)/2` (score 1, partial); after the explicit expansion prompt, corrected it to `γ(γ-4)/2` (assisted repair). Given the one-dimensional `L`-smoothness inequality, user independently substituted `L=1`, `δ=-γ`, and recognized equality with this quadratic's exact change (score 2 for the substitution). The general one-step descent proof and its assumptions are not secure.
+- Next in the repair: one scalar comparison of constrained Frank–Wolfe and an additive LMO update, then briefly reconnect all four Day 4 update rules and use a fresh independent example to check retention. After the full 25-minute repair, start the Day 5 Carlson et al. spectral-descent bridge. No Day 5 reading, derivation, or diagnostic is complete yet.
 
 ## Day 4 opening recall — 28 October 2026
 
@@ -141,4 +148,4 @@ Updated: 28 October 2026
 
 ## Next concrete action
 
-- Begin next session with an additional 25-minute concrete repair on the Frank–Wolfe gap definition/sign, one-step smoothness inequality, and parameter-versus-update constraint, then use one fresh independent example to check retention. After that, follow the full Day 5 plan in `curriculum.md`, including its existing spectral-descent bridge and core work, without removing or shortening anything. The four-method Day 4 comparison page is a complete working artifact, with assisted parts identified. The full Scion LMO tables, “Other norm choices,” and §3.2 transfer details remain deferred. The Day 2 update-rule comparison sheet, Day 1 quadratic plot, and tentative research note remain unfinished; the Day 3 tangent-gap sketch was reported complete. Only narrow convex-combination feasibility is secure. Do not run paid experiments.
+- Continue the additional Day 4 repair with one scalar parameter-versus-update comparison, briefly reconnect the four-method comparison page, and ask one fresh independent retention example. Then follow the full Day 5 plan in `curriculum.md`, beginning with the Carlson et al. spectral-descent bridge, without removing or shortening its core work. The full Day 4 gap proof and one-step descent proof are not secure; only narrow convex-combination feasibility is secure. The full Scion LMO tables, “Other norm choices,” and §3.2 transfer details remain deferred. The Day 2 update-rule comparison sheet, Day 1 quadratic plot, and tentative research note remain unfinished; the Day 3 tangent-gap sketch was reported complete. Do not run paid experiments.
