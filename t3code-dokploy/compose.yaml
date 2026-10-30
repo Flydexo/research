@@ -1,0 +1,14 @@
+services:
+  t3code:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    init: true
+    expose:
+      - "3773"
+    volumes:
+      - t3_home:/home/node
+
+volumes:
+  t3_home:
