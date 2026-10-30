@@ -1,6 +1,11 @@
 # Study progress
 
-Updated: 29 October 2026
+Updated: 30 October 2026
+
+## Day 5 reading completion report — 30 October 2026
+
+- User reports having read the assigned SSD, Keller Jordan Muon, modular-duality, and Moonshot AI sources. Treat this as reading completion, not independent mastery of their derivations or claims. SSD §§2.3–2.4 were conditional skims, and no completion of them was reported. User may read Pethick et al. and local `scalable-opti-modular-norm.pdf` if time permits; both remain optional after core work.
+- Start the Day 5 active work in curriculum order with the unfinished spectral-descent bridge: derive the rank-`r` spectral-ball LMO from the SVD and nuclear/spectral duality, then compare it with the squared spectral-norm local model and its magnitude. Ask one question at a time and wait for an independent attempt before hints. Continue through the RMS-to-RMS norm, polar update, modular composition and linear-layer direction, Moonshot scaling, small-matrix exact-versus-finite-Newton–Schulz diagnostic, spectral illustration, annotated update, and exit checks. Keep earlier assisted work and incomplete Day 4 proofs labeled honestly.
 
 ## Day 5 opening Day 4 repair — 29 October 2026
 
@@ -157,4 +162,4 @@ Updated: 29 October 2026
 
 ## Next concrete action
 
-- Explain `M.mass` from modular duality §3.4 using one two-module composition and the well-normed inequalities. Then resume unfinished Day 5 bridge and Muon work in curriculum order as practical, before continuing the modular reading. Preserve the remaining core readings, matrix derivations, small-matrix diagnostic, illustration, annotated update, and exit test. Day 4's full gap proof, one-step descent proof, and parameter-versus-update distinction are not secure; schedule delayed conceptual checks on Day 6. The full Scion LMO tables, “Other norm choices,” and §3.2 transfer details remain deferred. The Day 2 update-rule comparison sheet, Day 1 quadratic plot, and tentative research note remain unfinished; the Day 3 tangent-gap sketch was reported complete. Do not run paid experiments.
+- Ask the pending rank-`r` spectral-ball LMO question using nuclear/spectral duality, then derive the squared spectral-norm local-model magnitude. Continue Day 5 exercises and deliverables in `curriculum.md` order, one question at a time, using the reported reading as preparation rather than mastery. Pethick et al., `scalable-opti-modular-norm.pdf`, Shampoo, and other extension readings remain optional after core work. Day 4's full gap proof, one-step descent proof, and parameter-versus-update distinction are not secure; schedule delayed conceptual checks on Day 6. The full Scion LMO tables, “Other norm choices,” and §3.2 transfer details remain deferred. The Day 2 update-rule comparison sheet, Day 1 quadratic plot, and tentative research note remain unfinished; the Day 3 tangent-gap sketch was reported complete. Do not run paid experiments.
