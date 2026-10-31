@@ -1,6 +1,11 @@
 # Study progress
 
-Updated: 30 October 2026
+Updated: 31 October 2026
+
+## Day 5 spectral bridge exercise checkpoint — 31 October 2026
+
+- For `G=U_r Σ_r V_rᵀ`, user initially gave `+U_rV_rᵀ` for the spectral-ball minimizer, then corrected the sign after a prompt (score 1, assisted); feasibility was recognized, but the inner-product justification was supplied by the tutor. The LMO result is not an independent successful check.
+- For the spectral-norm squared local model, user independently found the scalar magnitude `t=Σ/L` (score 2, taking `Σ` to mean the sum of singular values). They asked what spectral–nuclear duality means; tutor clarified dual norm under the Frobenius pairing, not an induced map between normed matrix spaces. User correctly wrote the global lower bound `-||G||_* r+(L/2)r²` for `r=||Δ||op`, then mistakenly substituted `||G||_*=r`; after a prompt, independently computed `||diag(3,1)||_*=4` (partial/assisted global proof, score 1). When asked to show equality for the candidate, user said only that it hits the bound without the two requested values (partial, score 1). Explain equality briefly, then proceed to the Muon update and polar singular values. No spectral-bridge topic is secure; revisit on a fresh matrix later.
 
 ## Day 5 reading completion report — 30 October 2026
 
@@ -162,4 +167,4 @@ Updated: 30 October 2026
 
 ## Next concrete action
 
-- Ask the pending rank-`r` spectral-ball LMO question using nuclear/spectral duality, then derive the squared spectral-norm local-model magnitude. Continue Day 5 exercises and deliverables in `curriculum.md` order, one question at a time, using the reported reading as preparation rather than mastery. Pethick et al., `scalable-opti-modular-norm.pdf`, Shampoo, and other extension readings remain optional after core work. Day 4's full gap proof, one-step descent proof, and parameter-versus-update distinction are not secure; schedule delayed conceptual checks on Day 6. The full Scion LMO tables, “Other norm choices,” and §3.2 transfer details remain deferred. The Day 2 update-rule comparison sheet, Day 1 quadratic plot, and tentative research note remain unfinished; the Day 3 tangent-gap sketch was reported complete. Do not run paid experiments.
+- Briefly show equality in the spectral local-model lower bound, then proceed to Muon: momentum, ideal polar singular values, finite Newton–Schulz approximation, update scaling, and parameter step. Continue Day 5 derivations, diagnostic, spectral illustration, annotated update, and exit checks in `curriculum.md` order, one question at a time. Revisit the spectral LMO on a fresh matrix as a delayed independent check. Pethick et al., `scalable-opti-modular-norm.pdf`, Shampoo, and other extension readings remain optional after core work. Day 4's full gap proof, one-step descent proof, and parameter-versus-update distinction are not secure; schedule delayed conceptual checks on Day 6. The full Scion LMO tables, “Other norm choices,” and §3.2 transfer details remain deferred. The Day 2 update-rule comparison sheet, Day 1 quadratic plot, and tentative research note remain unfinished; the Day 3 tangent-gap sketch was reported complete. Do not run paid experiments.
