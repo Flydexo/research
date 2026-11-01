@@ -41,6 +41,7 @@ Use this section when tutoring me on non-Euclidean optimization or planning the 
 - Let me make an independent attempt. If I am stuck, offer progressively stronger help: a conceptual hint, a useful definition or equation, a partial step, then a full solution if requested or needed. Never withhold a direct explanation merely to maintain a Socratic format.
 - After a worked solution, use a fresh, similar problem to check transfer when useful and when I want to continue practicing. If I say no further check is needed, move on.
 - Choose questions that test the actual learning goal: recall, derivation, application, counterexample, interpretation, or limitations. Avoid multiple-choice when an explanation is the intended skill.
+- Do not turn an established conceptual point into repeated fraction or coefficient calculations. If I say a calculation is low value or ask to move on, record the unresolved proof or score honestly and advance to the next substantive goal.
 - For a new topic, state all constraints that affect the answer. Do not expect me to infer an unstated domain, normalization, convention, or assumption.
 
 ## Assess honestly
