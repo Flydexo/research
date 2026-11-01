@@ -1,0 +1,184 @@
+{
+  "purpose": "Educational matrix diagnostic; no model training or paid compute",
+  "pytorch": "2.12.0",
+  "python": "3.13.0",
+  "platform": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+  "device": "cpu",
+  "runtime_note": "Tiny CPU matrix timings are implementation overhead measurements, not GPU training benchmarks.",
+  "cases": [
+    {
+      "case": "tall_full_rank",
+      "shape": [
+        3,
+        2
+      ],
+      "rank": 2,
+      "input_dtype": "torch.float32",
+      "ns_dtype": "torch.float32",
+      "svd_reference_dtype": "torch.float64",
+      "input_singular_values": [
+        3.0,
+        1.0
+      ],
+      "exact_singular_values": [
+        1.0,
+        1.0
+      ],
+      "ns_singular_values": [
+        1.1337062120437622,
+        0.7530341148376465
+      ],
+      "descent_pairing_exact": 4.0,
+      "descent_pairing_ns": 3.3928085565567017,
+      "spectral_ball_alignment_ratio": 0.7481674971244084,
+      "frobenius_error_to_partial_polar": 0.280837140658276,
+      "exact_svd_median_us": 15.584,
+      "ns_median_us": 62.0625
+    },
+    {
+      "case": "tall_full_rank",
+      "shape": [
+        3,
+        2
+      ],
+      "rank": 2,
+      "input_dtype": "torch.float32",
+      "ns_dtype": "torch.bfloat16",
+      "svd_reference_dtype": "torch.float64",
+      "input_singular_values": [
+        3.0,
+        1.0
+      ],
+      "exact_singular_values": [
+        1.0,
+        1.0
+      ],
+      "ns_singular_values": [
+        1.140625,
+        0.765625
+      ],
+      "descent_pairing_exact": 4.0,
+      "descent_pairing_ns": 3.4375,
+      "spectral_ball_alignment_ratio": 0.7534246575342466,
+      "frobenius_error_to_partial_polar": 0.27332587007087344,
+      "exact_svd_median_us": 16.458,
+      "ns_median_us": 67.791
+    },
+    {
+      "case": "wide_full_rank",
+      "shape": [
+        2,
+        3
+      ],
+      "rank": 2,
+      "input_dtype": "torch.float32",
+      "ns_dtype": "torch.float32",
+      "svd_reference_dtype": "torch.float64",
+      "input_singular_values": [
+        3.0,
+        1.0
+      ],
+      "exact_singular_values": [
+        1.0,
+        1.0
+      ],
+      "ns_singular_values": [
+        1.1337062120437622,
+        0.7530341148376465
+      ],
+      "descent_pairing_exact": 4.0,
+      "descent_pairing_ns": 3.3928085565567017,
+      "spectral_ball_alignment_ratio": 0.7481674971244084,
+      "frobenius_error_to_partial_polar": 0.280837140658276,
+      "exact_svd_median_us": 16.667,
+      "ns_median_us": 65.167
+    },
+    {
+      "case": "wide_full_rank",
+      "shape": [
+        2,
+        3
+      ],
+      "rank": 2,
+      "input_dtype": "torch.float32",
+      "ns_dtype": "torch.bfloat16",
+      "svd_reference_dtype": "torch.float64",
+      "input_singular_values": [
+        3.0,
+        1.0
+      ],
+      "exact_singular_values": [
+        1.0,
+        1.0
+      ],
+      "ns_singular_values": [
+        1.140625,
+        0.765625
+      ],
+      "descent_pairing_exact": 4.0,
+      "descent_pairing_ns": 3.4375,
+      "spectral_ball_alignment_ratio": 0.7534246575342466,
+      "frobenius_error_to_partial_polar": 0.27332587007087344,
+      "exact_svd_median_us": 16.583,
+      "ns_median_us": 63.583
+    },
+    {
+      "case": "tall_rank_one",
+      "shape": [
+        3,
+        2
+      ],
+      "rank": 1,
+      "input_dtype": "torch.float32",
+      "ns_dtype": "torch.float32",
+      "svd_reference_dtype": "torch.float64",
+      "input_singular_values": [
+        3.0,
+        0.0
+      ],
+      "exact_singular_values": [
+        1.0,
+        0.0
+      ],
+      "ns_singular_values": [
+        0.6964364051818848,
+        0.0
+      ],
+      "descent_pairing_exact": 3.0,
+      "descent_pairing_ns": 2.0893092155456543,
+      "spectral_ball_alignment_ratio": 1.0,
+      "frobenius_error_to_partial_polar": 0.30356359481811523,
+      "exact_svd_median_us": 16.667,
+      "ns_median_us": 66.2085
+    },
+    {
+      "case": "tall_rank_one",
+      "shape": [
+        3,
+        2
+      ],
+      "rank": 1,
+      "input_dtype": "torch.float32",
+      "ns_dtype": "torch.bfloat16",
+      "svd_reference_dtype": "torch.float64",
+      "input_singular_values": [
+        3.0,
+        0.0
+      ],
+      "exact_singular_values": [
+        1.0,
+        0.0
+      ],
+      "ns_singular_values": [
+        0.671875,
+        0.0
+      ],
+      "descent_pairing_exact": 3.0,
+      "descent_pairing_ns": 2.015625,
+      "spectral_ball_alignment_ratio": 1.0,
+      "frobenius_error_to_partial_polar": 0.328125,
+      "exact_svd_median_us": 16.292,
+      "ns_median_us": 66.8125
+    }
+  ]
+}
