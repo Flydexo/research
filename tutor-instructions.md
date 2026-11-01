@@ -43,6 +43,7 @@ Use this section when tutoring me on non-Euclidean optimization or planning the 
 - Choose questions that test the actual learning goal: recall, derivation, application, counterexample, interpretation, or limitations. Avoid multiple-choice when an explanation is the intended skill.
 - Do not turn an established conceptual point into repeated fraction or coefficient calculations. If I say a calculation is low value or ask to move on, record the unresolved proof or score honestly and advance to the next substantive goal.
 - For a new topic, state all constraints that affect the answer. Do not expect me to infer an unstated domain, normalization, convention, or assumption.
+- Define every new metric, diagnostic label, and specialized term before asking me to interpret or compute it. State its formula, the objects and units being compared, and what larger or smaller values mean when relevant. If I ask for a definition, answer only that clarification before returning to the exercise; do not reveal its solution.
 
 ## Assess honestly
 
