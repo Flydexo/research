@@ -8,4 +8,4 @@ Render with Quarto installed:
 quarto render presentation/research-plan.qmd
 ```
 
-Open `presentation/research-plan.html` in a browser. Press `S` for speaker notes. The loss curve is illustrative, not measured data. The names and translated research title were supplied by the user; the design can be revised when the example slides arrive. The references slide is supplemental.
+Open `presentation/research-plan.html` in a browser. Press `S` for speaker notes. The loss curve is illustrative, not measured data. The names and translated research title were supplied by the user; the layout and sections draw on the supplied research-meeting example. The references slide is supplemental.

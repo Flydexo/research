@@ -200,6 +200,29 @@ The appropriate norm is a **hypothesis to derive and test**, not a universal cho
 Compare training quality, time to target, memory, compute and sensitivity to tuning. A usable library and speedrun competitiveness are ambitions, not established results. Benchmark rules must be checked when the experiment is run.
 :::
 
+## Methods
+
+::: {.columns}
+::: {.column width="50%"}
+### Mathematical analysis
+
+- Study how layer operations shape useful norms.
+- Derive candidate updates and examine their computational cost.
+- Prove properties under explicit assumptions where possible.
+:::
+::: {.column width="50%"}
+### Experimental evaluation
+
+- Implement candidates in Python and PyTorch.
+- Compare to established baselines under matched budgets.
+- Measure loss, time to target, memory, and sensitivity to tuning.
+:::
+:::
+
+::: {.takeaway}
+Use the results to refine both the theory and the implementation.
+:::
+
 ## A three-year plan
 
 ::: {.columns}
