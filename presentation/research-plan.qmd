@@ -85,25 +85,44 @@ $m_t$: momentum; $v_t$: squared-gradient average; $\epsilon$: numerical stabiliz
 Sources: [Kingma & Ba, Adam](https://arxiv.org/abs/1412.6980); [Loshchilov & Hutter, AdamW](https://arxiv.org/abs/1711.05101). Adam shown without L2 regularization; AdamW uses decoupled decay.
 :::
 
-## Mirror descent and Bregman divergence
+## Mirror descent: a different geometry
 
-For a differentiable strictly convex potential $\psi$:
+The potential $\psi$ determines how movement away from the current point is measured:
 
 $$D_\psi(x,y)=\psi(x)-\psi(y)-\langle\nabla\psi(y),x-y\rangle.$$
 
 ::: {.columns}
-::: {.column width="55%"}
+::: {.column width="53%"}
+### Primal update
 $$x_{t+1}=\arg\min_{x\in C}\left\{\eta\langle g_t,x\rangle+D_\psi(x,x_t)\right\}.$$
 
-Without constraints, $\nabla\psi(x_{t+1})=\nabla\psi(x_t)-\eta g_t$: update in **dual coordinates**, then map back via $(\nabla\psi)^{-1}$.
+For $\psi(x)=\frac12\|x\|_2^2$, this becomes projected gradient descent.
 :::
-::: {.column width="45%"}
+::: {.column width="47%"}
 ![Bregman divergence as tangent gap](bregman.svg){width="100%"}
 :::
 :::
 
 ::: {.source}
-Sources: [Bubeck, §§4.1–4.3](https://arxiv.org/abs/1405.4980); [Reid, Bregman divergences](https://mark.reid.name/blog/meet-the-bregman-divergences.html).
+Sources: [Bubeck, Convex Optimization, §§4.1–4.3](https://arxiv.org/abs/1405.4980); [Reid, Bregman divergences](https://mark.reid.name/blog/meet-the-bregman-divergences.html).
+:::
+
+## Dual coordinates and norm dualization
+
+### Mirror descent in dual coordinates
+
+$$z_t=\nabla\psi(x_t),\qquad z_{t+1}=z_t-\eta g_t,\qquad x_{t+1}=\nabla\psi^*(z_{t+1}).$$
+
+This unconstrained form requires the mirror-map assumptions and valid dual-domain iterates.
+
+### Norm-based dualizer (modular duality)
+
+$$\operatorname{dualize}_{\|\cdot\|}(g)\in\arg\max_{\|u\|=1}\langle g,u\rangle,\qquad g\ne0.$$
+
+This is the paper's **unit-direction** convention; it is not the same map as $\nabla\psi^*$ above.
+
+::: {.source}
+Sources: [Bubeck, §4.2](https://arxiv.org/abs/1405.4980); [Bernstein & Newhouse, Definitions 1–2](https://arxiv.org/abs/2410.21265).
 :::
 
 ## Frank–Wolfe and the linear minimization oracle
@@ -124,20 +143,30 @@ Source: [Jaggi, Revisiting Frank–Wolfe, Algorithm 1](https://proceedings.mlr.p
 
 ## Modular norms: geometry by layer
 
-For input norm $\|\cdot\|_\alpha$ and output norm $\|\cdot\|_\beta$:
+### Definition · induced operator norm
+
+Given input norm $\|\cdot\|_\alpha$ and output norm $\|\cdot\|_\beta$,
 
 $$\|W\|_{\alpha\to\beta}=\sup_{\|x\|_\alpha\leq1}\|Wx\|_\beta.$$
 
-| Module | Layer norm in the paper | Dualized gradient direction |
-|:--|:--|:--|
-| Linear | RMS $\to$ RMS operator norm | scaled polar factor $UV^\top$ |
-| Embed | $\ell_1\to$ RMS operator norm | normalize gradient columns by RMS |
-| Conv2D | $k^2$ times max slice RMS $\to$ RMS norm | scaled polar factor per kernel slice |
+It measures the largest output magnitude produced by an input in the unit ball.
 
-A unit-ball LMO is homogeneous of degree zero in $g$; a squared-norm duality map includes gradient magnitude. The two should not be conflated.
+### Design idea
+
+Choose layer norms from their input and output roles, then derive a dualizer for each module.
 
 ::: {.source}
-Source: [Bernstein & Newhouse, Modular Duality in Deep Learning, Table 1](https://arxiv.org/abs/2410.21265); normalized directions shown, see paper for scaling and zero-gradient conventions.
+Source: [Bernstein & Newhouse, Definition 3](https://arxiv.org/abs/2410.21265).
+:::
+
+## Modular norms: the paper's layer table
+
+![Table 1 from Modular Duality in Deep Learning, showing module norms and duality maps for Linear, Embed and Conv2D](modular-table.png){width="100%"}
+
+$G=U\Sigma V^\top$ denotes a reduced SVD; the paper specifies the exact scaling and conventions.
+
+::: {.source}
+Source: [Bernstein & Newhouse, Modular Duality in Deep Learning, Table 1, p. 7](https://arxiv.org/abs/2410.21265).
 :::
 
 ## Muon
@@ -150,30 +179,59 @@ Other parameters can use a different optimizer such as AdamW.
 Source: [Keller Jordan, Muon](https://kellerjordan.github.io/posts/muon/). The algorithm image requires an internet connection.
 :::
 
-## Does Muon scale?
+## Newton–Schulz in Muon
 
-### Yes: reported large-model examples
+Starting from a normalized matrix $X_0$, the practical iteration in Jordan's implementation is
 
-- **Moonlight:** 16B total / 3B active parameters; trained using a scaled Muon variant.
-- **Kimi K2:** 1T total parameters; pre-trained with **MuonClip**, a Muon variant.
+$$A_k=X_kX_k^\top,\qquad X_{k+1}=aX_k+(bA_k+cA_k^2)X_k.$$
 
-These are reported model-training results, not a guarantee that every Muon implementation scales identically.
+- Five iterations; $a=3.4445$, $b=-4.7750$, $c=2.0315$.
+- Transpose tall matrices before the iteration, then transpose back.
+- It produces a fast **approximate** orthogonalization; finite iterates need not equal the exact polar factor.
 
 ::: {.source}
-Sources: [Moonshot AI, Muon is Scalable for LLM Training](https://arxiv.org/abs/2502.16982); [Kimi K2 technical report](https://github.com/MoonshotAI/Kimi-K2).
+Source: [Keller Jordan, Muon: NewtonSchulz5](https://kellerjordan.github.io/posts/muon/).
+:::
+
+## Does Muon scale?
+
+### Large-model evidence
+
+- **Kimi K2** · pre-trained with MuonClip; **Kimi K3** · per-head Muon.
+- **DeepSeek-V4.1-Flash** · Muon for backbone matrices and head-wise Muon for Q/K.
+- **GLM-5** · head-wise Muon reported in the DeepSeek technical report.
+
+**Other frontier models:** Mistral Large 4 “Le Chonk” and Muse Spark Open have public model information; their Muon usage was not verified from primary training reports.
+
+::: {.source}
+Sources: [Kimi K2](https://github.com/MoonshotAI/Kimi-K2), [Kimi K3 report](https://github.com/MoonshotAI/Kimi-K3/blob/main/k3_tech_report.pdf), [DeepSeek-V4.1 report, §3](https://arxiv.org/html/2609.19969), [Mistral Large 4](https://huggingface.co/blog/mistral-large4), [Muse Spark Open](https://huggingface.co/docs/transformers/en/model_doc/muse_spark).
+:::
+
+## What optimizers do JEPA world models use?
+
+### Training recipes vary by model
+
+- **V-JEPA 2-AC:** AdamW for action-conditioned model training.
+- **UniJEPA:** Adam for the models reported in its training setup.
+- **Temporal Discriminative World Models:** the authors report a fused Muon–AdamW training optimizer in their experiments.
+
+The training optimizer updates model weights. Planning can use a separate optimizer, such as the cross-entropy method over action sequences.
+
+::: {.source}
+Sources: [V-JEPA 2, §D](https://arxiv.org/html/2506.09985), [UniJEPA, implementation details](https://arxiv.org/html/2608.07409), [Temporal Discriminative World Models](https://td-worldmodel.github.io/TD-WorldModel/). These are specific reported recipes, not a claim about every JEPA model.
 :::
 
 ## Research question
 
 ### What norms and updates fit modern architectures?
 
-- **Attention:** multi-head, multi-head latent attention (MLA), sparse attention and residual connections.
-- **Recent examples:** DeepSeek Sparse Attention and compressed/sparse attention variants.
+- **DeepSeek-V4.1-Flash:** compressed sparse attention 2 (CSA2), cross-layer KV/index reuse and sliding windows.
+- **Kimi K3:** Kimi Delta Attention (KDA), gated MLA and attention residuals.
+- **Mistral Large 4:** MLA with a sparse attention indexer and cross-layer KV sharing.
 - **State-space models:** architectures such as Mamba.
-- **Compositions:** how do useful layer geometries interact across a network?
 
 ::: {.source}
-Examples: [DeepSeek-V3.2](https://arxiv.org/abs/2512.02556); [Mamba](https://arxiv.org/abs/2312.00752). Residual connections are an architectural composition, not an attention mechanism.
+Sources: [DeepSeek-V4.1, §2.3](https://arxiv.org/html/2609.19969), [Kimi K3](https://github.com/MoonshotAI/Kimi-K3), [Mistral Large 4](https://huggingface.co/blog/mistral-large4), [Mamba](https://arxiv.org/abs/2312.00752). Examples are as documented in November 2026.
 :::
 
 ## Goals and evaluation
@@ -188,33 +246,6 @@ The API, norm selection and speedrun performance are proposed goals, not establi
 :::
 
 ## A three-year plan
-
-::: {.columns}
-::: {.column width="33%"}
-### Year 1
-**Build foundations**
-
-- Study geometry and optimizer literature.
-- Reproduce baselines and set up benchmarks.
-- Identify promising layer-level norms.
-:::
-::: {.column width="33%"}
-### Year 2
-**Develop and test**
-
-- Derive candidate norms and updates.
-- Analyze assumptions and convergence.
-- Run controlled architecture comparisons.
-:::
-::: {.column width="33%"}
-### Year 3
-**Scale and share**
-
-- Test promising methods at larger scale.
-- Pursue the NanoGPT speedrun goal.
-- Package reusable PyTorch tooling and publish results.
-:::
-:::
 
 ## Motivation and professional ambitions
 
@@ -234,8 +265,4 @@ The API, norm selection and speedrun performance are proposed goals, not establi
 :::
 :::
 
-## Thank you
-
-### Questions and discussion
-
-Mathéo Le Dévéhat · CVN
+## Thank you {.closing}

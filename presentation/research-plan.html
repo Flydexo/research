@@ -100,7 +100,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="research-plan_files/libs/revealjs/dist/theme/quarto-e2e1ba58180b29e6b0e0909ac9610386.css">
+  <link rel="stylesheet" href="research-plan_files/libs/revealjs/dist/theme/quarto-ad76eccf1750a227cc9dfdd08e892ad8.css">
   <link href="research-plan_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="research-plan_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="research-plan_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -267,15 +267,16 @@ v_t&amp;=\beta_2v_{t-1}+(1-\beta_2)g_t^{\odot 2},\\
 <p>Sources: <a href="https://arxiv.org/abs/1412.6980">Kingma &amp; Ba, Adam</a>; <a href="https://arxiv.org/abs/1711.05101">Loshchilov &amp; Hutter, AdamW</a>. Adam shown without L2 regularization; AdamW uses decoupled decay.</p>
 </div>
 </section>
-<section id="mirror-descent-and-bregman-divergence" class="slide level2">
-<h2>Mirror descent and Bregman divergence</h2>
-<p>For a differentiable strictly convex potential <span class="math inline">\(\psi\)</span>:</p>
+<section id="mirror-descent-a-different-geometry" class="slide level2">
+<h2>Mirror descent: a different geometry</h2>
+<p>The potential <span class="math inline">\(\psi\)</span> determines how movement away from the current point is measured:</p>
 <p><span class="math display">\[D_\psi(x,y)=\psi(x)-\psi(y)-\langle\nabla\psi(y),x-y\rangle.\]</span></p>
 <div class="columns">
-<div class="column" style="width:55%;">
+<div class="column" style="width:53%;">
+<h3 id="primal-update">Primal update</h3>
 <p><span class="math display">\[x_{t+1}=\arg\min_{x\in C}\left\{\eta\langle g_t,x\rangle+D_\psi(x,x_t)\right\}.\]</span></p>
-<p>Without constraints, <span class="math inline">\(\nabla\psi(x_{t+1})=\nabla\psi(x_t)-\eta g_t\)</span>: update in <strong>dual coordinates</strong>, then map back via <span class="math inline">\((\nabla\psi)^{-1}\)</span>.</p>
-</div><div class="column" style="width:45%;">
+<p>For <span class="math inline">\(\psi(x)=\frac12\|x\|_2^2\)</span>, this becomes projected gradient descent.</p>
+</div><div class="column" style="width:47%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="bregman.svg" style="width:100.0%"></p>
@@ -284,7 +285,19 @@ v_t&amp;=\beta_2v_{t-1}+(1-\beta_2)g_t^{\odot 2},\\
 </div>
 </div></div>
 <div class="source">
-<p>Sources: <a href="https://arxiv.org/abs/1405.4980">Bubeck, §§4.1–4.3</a>; <a href="https://mark.reid.name/blog/meet-the-bregman-divergences.html">Reid, Bregman divergences</a>.</p>
+<p>Sources: <a href="https://arxiv.org/abs/1405.4980">Bubeck, Convex Optimization, §§4.1–4.3</a>; <a href="https://mark.reid.name/blog/meet-the-bregman-divergences.html">Reid, Bregman divergences</a>.</p>
+</div>
+</section>
+<section id="dual-coordinates-and-norm-dualization" class="slide level2">
+<h2>Dual coordinates and norm dualization</h2>
+<h3 id="mirror-descent-in-dual-coordinates">Mirror descent in dual coordinates</h3>
+<p><span class="math display">\[z_t=\nabla\psi(x_t),\qquad z_{t+1}=z_t-\eta g_t,\qquad x_{t+1}=\nabla\psi^*(z_{t+1}).\]</span></p>
+<p>This unconstrained form requires the mirror-map assumptions and valid dual-domain iterates.</p>
+<h3 id="norm-based-dualizer-modular-duality">Norm-based dualizer (modular duality)</h3>
+<p><span class="math display">\[\operatorname{dualize}_{\|\cdot\|}(g)\in\arg\max_{\|u\|=1}\langle g,u\rangle,\qquad g\ne0.\]</span></p>
+<p>This is the paper’s <strong>unit-direction</strong> convention; it is not the same map as <span class="math inline">\(\nabla\psi^*\)</span> above.</p>
+<div class="source">
+<p>Sources: <a href="https://arxiv.org/abs/1405.4980">Bubeck, §4.2</a>; <a href="https://arxiv.org/abs/2410.21265">Bernstein &amp; Newhouse, Definitions 1–2</a>.</p>
 </div>
 </section>
 <section id="frankwolfe-and-the-linear-minimization-oracle" class="slide level2">
@@ -300,42 +313,22 @@ v_t&amp;=\beta_2v_{t-1}+(1-\beta_2)g_t^{\odot 2},\\
 </section>
 <section id="modular-norms-geometry-by-layer" class="slide level2">
 <h2>Modular norms: geometry by layer</h2>
-<p>For input norm <span class="math inline">\(\|\cdot\|_\alpha\)</span> and output norm <span class="math inline">\(\|\cdot\|_\beta\)</span>:</p>
+<h3 id="definition-induced-operator-norm">Definition · induced operator norm</h3>
+<p>Given input norm <span class="math inline">\(\|\cdot\|_\alpha\)</span> and output norm <span class="math inline">\(\|\cdot\|_\beta\)</span>,</p>
 <p><span class="math display">\[\|W\|_{\alpha\to\beta}=\sup_{\|x\|_\alpha\leq1}\|Wx\|_\beta.\]</span></p>
-<table class="caption-top">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Module</th>
-<th style="text-align: left;">Layer norm in the paper</th>
-<th style="text-align: left;">Dualized gradient direction</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Linear</td>
-<td style="text-align: left;">RMS <span class="math inline">\(\to\)</span> RMS operator norm</td>
-<td style="text-align: left;">scaled polar factor <span class="math inline">\(UV^\top\)</span></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Embed</td>
-<td style="text-align: left;"><span class="math inline">\(\ell_1\to\)</span> RMS operator norm</td>
-<td style="text-align: left;">normalize gradient columns by RMS</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Conv2D</td>
-<td style="text-align: left;"><span class="math inline">\(k^2\)</span> times max slice RMS <span class="math inline">\(\to\)</span> RMS norm</td>
-<td style="text-align: left;">scaled polar factor per kernel slice</td>
-</tr>
-</tbody>
-</table>
-<p>A unit-ball LMO is homogeneous of degree zero in <span class="math inline">\(g\)</span>; a squared-norm duality map includes gradient magnitude. The two should not be conflated.</p>
+<p>It measures the largest output magnitude produced by an input in the unit ball.</p>
+<h3 id="design-idea">Design idea</h3>
+<p>Choose layer norms from their input and output roles, then derive a dualizer for each module.</p>
 <div class="source">
-<p>Source: <a href="https://arxiv.org/abs/2410.21265">Bernstein &amp; Newhouse, Modular Duality in Deep Learning, Table 1</a>; normalized directions shown, see paper for scaling and zero-gradient conventions.</p>
+<p>Source: <a href="https://arxiv.org/abs/2410.21265">Bernstein &amp; Newhouse, Definition 3</a>.</p>
+</div>
+</section>
+<section id="modular-norms-the-papers-layer-table" class="slide level2">
+<h2>Modular norms: the paper’s layer table</h2>
+
+<img data-src="modular-table.png" style="width:100.0%" class="r-stretch quarto-figure-center"><p class="caption">Table 1 from Modular Duality in Deep Learning, showing module norms and duality maps for Linear, Embed and Conv2D</p><p><span class="math inline">\(G=U\Sigma V^\top\)</span> denotes a reduced SVD; the paper specifies the exact scaling and conventions.</p>
+<div class="source">
+<p>Source: <a href="https://arxiv.org/abs/2410.21265">Bernstein &amp; Newhouse, Modular Duality in Deep Learning, Table 1, p.&nbsp;7</a>.</p>
 </div>
 </section>
 <section id="muon" class="slide level2">
@@ -346,29 +339,56 @@ v_t&amp;=\beta_2v_{t-1}+(1-\beta_2)g_t^{\odot 2},\\
 <p>Source: <a href="https://kellerjordan.github.io/posts/muon/">Keller Jordan, Muon</a>. The algorithm image requires an internet connection.</p>
 </div>
 </section>
+<section id="newtonschulz-in-muon" class="slide level2">
+<h2>Newton–Schulz in Muon</h2>
+<p>Starting from a normalized matrix <span class="math inline">\(X_0\)</span>, the practical iteration in Jordan’s implementation is</p>
+<p><span class="math display">\[A_k=X_kX_k^\top,\qquad X_{k+1}=aX_k+(bA_k+cA_k^2)X_k.\]</span></p>
+<ul>
+<li>Five iterations; <span class="math inline">\(a=3.4445\)</span>, <span class="math inline">\(b=-4.7750\)</span>, <span class="math inline">\(c=2.0315\)</span>.</li>
+<li>Transpose tall matrices before the iteration, then transpose back.</li>
+<li>It produces a fast <strong>approximate</strong> orthogonalization; finite iterates need not equal the exact polar factor.</li>
+</ul>
+<div class="source">
+<p>Source: <a href="https://kellerjordan.github.io/posts/muon/">Keller Jordan, Muon: NewtonSchulz5</a>.</p>
+</div>
+</section>
 <section id="does-muon-scale" class="slide level2">
 <h2>Does Muon scale?</h2>
-<h3 id="yes-reported-large-model-examples">Yes: reported large-model examples</h3>
+<h3 id="large-model-evidence">Large-model evidence</h3>
 <ul>
-<li><strong>Moonlight:</strong> 16B total / 3B active parameters; trained using a scaled Muon variant.</li>
-<li><strong>Kimi K2:</strong> 1T total parameters; pre-trained with <strong>MuonClip</strong>, a Muon variant.</li>
+<li><strong>Kimi K2</strong> · pre-trained with MuonClip; <strong>Kimi K3</strong> · per-head Muon.</li>
+<li><strong>DeepSeek-V4.1-Flash</strong> · Muon for backbone matrices and head-wise Muon for Q/K.</li>
+<li><strong>GLM-5</strong> · head-wise Muon reported in the DeepSeek technical report.</li>
 </ul>
-<p>These are reported model-training results, not a guarantee that every Muon implementation scales identically.</p>
+<p><strong>Other frontier models:</strong> Mistral Large 4 “Le Chonk” and Muse Spark Open have public model information; their Muon usage was not verified from primary training reports.</p>
 <div class="source">
-<p>Sources: <a href="https://arxiv.org/abs/2502.16982">Moonshot AI, Muon is Scalable for LLM Training</a>; <a href="https://github.com/MoonshotAI/Kimi-K2">Kimi K2 technical report</a>.</p>
+<p>Sources: <a href="https://github.com/MoonshotAI/Kimi-K2">Kimi K2</a>, <a href="https://github.com/MoonshotAI/Kimi-K3/blob/main/k3_tech_report.pdf">Kimi K3 report</a>, <a href="https://arxiv.org/html/2609.19969">DeepSeek-V4.1 report, §3</a>, <a href="https://huggingface.co/blog/mistral-large4">Mistral Large 4</a>, <a href="https://huggingface.co/docs/transformers/en/model_doc/muse_spark">Muse Spark Open</a>.</p>
+</div>
+</section>
+<section id="what-optimizers-do-jepa-world-models-use" class="slide level2">
+<h2>What optimizers do JEPA world models use?</h2>
+<h3 id="training-recipes-vary-by-model">Training recipes vary by model</h3>
+<ul>
+<li><strong>V-JEPA 2-AC:</strong> AdamW for action-conditioned model training.</li>
+<li><strong>UniJEPA:</strong> Adam for the models reported in its training setup.</li>
+<li><strong>Temporal Discriminative World Models:</strong> the authors report a fused Muon–AdamW training optimizer in their experiments.</li>
+</ul>
+<p>The training optimizer updates model weights. Planning can use a separate optimizer, such as the cross-entropy method over action sequences.</p>
+<div class="source">
+<p>Sources: <a href="https://arxiv.org/html/2506.09985">V-JEPA 2, §D</a>, <a href="https://arxiv.org/html/2608.07409">UniJEPA, implementation details</a>, <a href="https://td-worldmodel.github.io/TD-WorldModel/">Temporal Discriminative World Models</a>. These are specific reported recipes, not a claim about every JEPA model.</p>
 </div>
 </section>
 <section id="research-question" class="slide level2">
 <h2>Research question</h2>
 <h3 id="what-norms-and-updates-fit-modern-architectures">What norms and updates fit modern architectures?</h3>
 <ul>
-<li><strong>Attention:</strong> multi-head, multi-head latent attention (MLA), sparse attention and residual connections.</li>
-<li><strong>Recent examples:</strong> DeepSeek Sparse Attention and compressed/sparse attention variants.</li>
+<li><strong>DeepSeek-V4.1-Flash:</strong> compressed sparse attention 2 (CSA2), cross-layer KV/index reuse and sliding windows.</li>
+<li><strong>Kimi K3:</strong> Kimi Delta Attention (KDA), gated MLA and attention residuals.</li>
+<li><strong>Mistral Large 4:</strong> MLA with a sparse attention indexer and cross-layer KV sharing.</li>
 <li><strong>State-space models:</strong> architectures such as Mamba.</li>
-<li><strong>Compositions:</strong> how do useful layer geometries interact across a network?</li>
 </ul>
 <div class="source">
-<p>Examples: <a href="https://arxiv.org/abs/2512.02556">DeepSeek-V3.2</a>; <a href="https://arxiv.org/abs/2312.00752">Mamba</a>. Residual connections are an architectural composition, not an attention mechanism.</p>
+<p>Sources: <a href="https://arxiv.org/html/2609.19969">DeepSeek-V4.1, §2.3</a>, <a href="https://github.com/MoonshotAI/Kimi-K3">Kimi K3</a>, <a href="https://huggingface.co/blog/mistral-large4">Mistral Large 4</a>, <a href="https://arxiv.org/abs/2312.00752">Mamba</a>. Examples are as documented in November 2026.</p>
 </div>
 </section>
 <section id="goals-and-evaluation" class="slide level2">
@@ -395,32 +415,6 @@ v_t&amp;=\beta_2v_{t-1}+(1-\beta_2)g_t^{\odot 2},\\
 </section>
 <section id="a-three-year-plan" class="slide level2">
 <h2>A three-year plan</h2>
-<div class="columns">
-<div class="column" style="width:33%;">
-<h3 id="year-1">Year 1</h3>
-<p><strong>Build foundations</strong></p>
-<ul>
-<li>Study geometry and optimizer literature.</li>
-<li>Reproduce baselines and set up benchmarks.</li>
-<li>Identify promising layer-level norms.</li>
-</ul>
-</div><div class="column" style="width:33%;">
-<h3 id="year-2">Year 2</h3>
-<p><strong>Develop and test</strong></p>
-<ul>
-<li>Derive candidate norms and updates.</li>
-<li>Analyze assumptions and convergence.</li>
-<li>Run controlled architecture comparisons.</li>
-</ul>
-</div><div class="column" style="width:33%;">
-<h3 id="year-3">Year 3</h3>
-<p><strong>Scale and share</strong></p>
-<ul>
-<li>Test promising methods at larger scale.</li>
-<li>Pursue the NanoGPT speedrun goal.</li>
-<li>Package reusable PyTorch tooling and publish results.</li>
-</ul>
-</div></div>
 </section>
 <section id="motivation-and-professional-ambitions" class="slide level2">
 <h2>Motivation and professional ambitions</h2>
@@ -440,10 +434,8 @@ v_t&amp;=\beta_2v_{t-1}+(1-\beta_2)g_t^{\odot 2},\\
 </ul>
 </div></div>
 </section>
-<section id="thank-you" class="slide level2">
+<section id="thank-you" class="slide level2 closing">
 <h2>Thank you</h2>
-<h3 id="questions-and-discussion">Questions and discussion</h3>
-<p>Mathéo Le Dévéhat · CVN</p>
 
 </section>
     </div>
