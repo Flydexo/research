@@ -1,7 +1,7 @@
 ---
-title: "Non-Euclidean Optimization for Machine Learning"
+title: "Non-Euclidean Optimization Methods for Machine Learning"
 subtitle: "Research context and three-year plan · CVN, CentraleSupélec"
-author: "Matteo Ledevehat · Supervisor: Antonio Silveti-Falls"
+author: "Mathéo Le Dévéhat · Supervisor: Antonio-José Silveti-Falls"
 date: ""
 format:
   revealjs:
@@ -16,7 +16,7 @@ format:
 ---
 
 ::: notes
-About 10 minutes. The supervisor spelling and affiliation come from the local project brief; confirm against the names to be supplied. Design will be revised once the example is available.
+About 10 minutes. The names and title were supplied by Mathéo. Design can be revised once the example is available.
 :::
 
 ## The problem: how should we update the weights?
@@ -109,6 +109,35 @@ Uses a geometry defined by a potential and its Bregman divergence to form update
 
 ::: notes
 These are related geometry-aware tools, not interchangeable algorithms. Frank–Wolfe is a constrained method; modular duality uses duality maps. See Bernstein & Newhouse, Modular Duality in Deep Learning, 2024; Jaggi, 2013.
+:::
+
+## Bregman divergence and mirror descent
+
+For a differentiable convex potential $\psi$, the **Bregman divergence** measures the gap between $\psi(x)$ and its linear approximation at $y$:
+
+$$D_{\psi}(x,y) = \psi(x)-\psi(y)-\langle\nabla\psi(y), x-y\rangle$$
+
+::: {.columns}
+::: {.column width="50%"}
+### Euclidean example
+
+For $\psi(x)=\tfrac12\|x\|_2^2$,
+
+$$D_{\psi}(x,y)=\tfrac12\|x-y\|_2^2.$$
+:::
+::: {.column width="50%"}
+### Mirror descent
+
+Chooses an update by balancing a linearized loss against the Bregman divergence from the current point.
+:::
+:::
+
+::: {.takeaway}
+Different potentials give different geometries; a Bregman divergence need not be symmetric.
+:::
+
+::: notes
+Mirror descent can be written as the minimization over the feasible set of the gradient's linear model plus D_psi(x, x_t)/eta. With a quadratic potential and no constraints, it recovers gradient descent. Differentiability is required at the reference point; convexity makes the divergence nonnegative.
 :::
 
 ## Muon: a matrix-aware example
@@ -239,5 +268,5 @@ My goal: combine **theory, experiments, and useful tools**.
 
 ### Questions and discussion
 
-Matteo Ledevehat · CVN
+Mathéo Le Dévéhat · CVN
 
