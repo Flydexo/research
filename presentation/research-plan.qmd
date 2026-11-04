@@ -1,8 +1,4 @@
 ---
-title: "Non-Euclidean Optimization Methods for Machine Learning"
-subtitle: "Research context and three-year plan · CVN, CentraleSupélec"
-author: "Mathéo Le Dévéhat · Supervisor: Antonio-José Silveti-Falls"
-date: ""
 format:
   revealjs:
     theme: [default, custom.scss]
@@ -12,211 +8,183 @@ format:
     width: 1280
     height: 720
     margin: 0.07
-    chalkboard: false
+    code-overflow: wrap
+    highlight-style: github
 ---
 
-::: notes
-About 10 minutes. The names and title were supplied by Mathéo. Design can be revised once the example is available.
-:::
+## Non-Euclidean Optimization Methods for Machine Learning {.opening}
+
+### Mathéo Le Dévéhat
+
+Antonio-José Silveti-Falls · CVN
 
 ## The problem: how should we update the weights?
 
-::: {.columns}
-::: {.column width="53%"}
-```python
+For data $(x_i,y_i)_{i=1}^n$, a model $f_\theta$ and a per-example loss $\ell$:
+
+$$\min_{\theta}\; L(\theta)=\frac1n\sum_{i=1}^{n}\ell(f_\theta(x_i),y_i) \qquad \text{(empirical risk)}$$
+
+::: {.columns .loop}
+::: {.column width="52%"}
+```{.python}
 for x, y in train_loader:
     optimizer.zero_grad()
     loss = criterion(model(x), y)
     loss.backward()
-    optimizer.step()  # how should we update?
+    optimizer.step()
 ```
-
-The optimizer turns gradients into parameter updates.
 :::
-::: {.column width="47%"}
-![Synthetic training loss; no training was run](loss.svg){width="100%"}
+::: {.column width="48%"}
+![Synthetic training loss](loss.svg){width="100%"}
 :::
-:::
-
-::: {.takeaway}
-**Question:** Can an update use the structure of the model to reach a good solution faster?
 :::
 
 ::: notes
-The curve is synthetic: no training was run. Loss may fluctuate in practice.
+The curve is synthetic, not an experimental measurement. A batch loss estimates empirical risk; full-dataset loss is an average over all examples.
 :::
 
-## Gradient descent and SGD
+## Gradient descent and stochastic gradient descent
 
-$$\theta_{t+1} = \theta_t - \eta\, g_t$$
+The first-order local approximation of a differentiable objective is
+
+$$L(\theta+\Delta)\approx L(\theta)+\langle\nabla L(\theta),\Delta\rangle.$$
+
+For convex $L$, the linearization is also a global lower bound.
 
 ::: {.columns}
 ::: {.column width="50%"}
 ### Gradient descent
-Uses the full dataset to compute the gradient. Simple, but expensive for large datasets.
+$$\theta_{t+1}=\theta_t-\eta\nabla L(\theta_t)$$
+Gradient of the full empirical risk.
 :::
 ::: {.column width="50%"}
-### Stochastic gradient descent
-Uses a mini-batch estimate. Cheaper updates, with noise that changes from step to step.
+### SGD
+$$\theta_{t+1}=\theta_t-\eta g_t$$
+$g_t$ is a mini-batch gradient estimate.
 :::
 :::
 
-::: {.takeaway}
-The usual update uses **Euclidean geometry**: it treats the gradient as the update direction.
+## Adam and AdamW: full update
+
+Initialize $m_0=v_0=0$. For $t=1,2,\ldots$, compute batch gradient $g_t$:
+
+$$\begin{aligned}
+m_t&=\beta_1m_{t-1}+(1-\beta_1)g_t,\\
+v_t&=\beta_2v_{t-1}+(1-\beta_2)g_t^{\odot 2},\\
+\hat m_t&=m_t/(1-\beta_1^t),\qquad \hat v_t=v_t/(1-\beta_2^t).
+\end{aligned}$$
+
+$$\begin{aligned}
+\text{Adam:}\quad \theta_{t+1}&=\theta_t-\eta_t\frac{\hat m_t}{\sqrt{\hat v_t}+\epsilon},\\
+\text{AdamW:}\quad \theta_{t+1}&=(1-\eta_t\lambda)\theta_t-\eta_t\frac{\hat m_t}{\sqrt{\hat v_t}+\epsilon}.
+\end{aligned}$$
+
+$m_t$: momentum; $v_t$: squared-gradient average; $\epsilon$: numerical stabilizer. Operations are coordinate-wise.
+
+::: {.source}
+Sources: [Kingma & Ba, Adam](https://arxiv.org/abs/1412.6980); [Loshchilov & Hutter, AdamW](https://arxiv.org/abs/1711.05101). Adam shown without L2 regularization; AdamW uses decoupled decay.
 :::
 
-## Adam and AdamW
+## Mirror descent and Bregman divergence
 
-::: {.columns}
-::: {.column width="50%"}
-### Adam
-Combines momentum with coordinate-wise scaling based on past squared gradients.
+For a differentiable strictly convex potential $\psi$:
 
-$$\theta_{t+1}\approx\theta_t-\eta\frac{m_t}{\sqrt{v_t}+\epsilon}$$
-:::
-::: {.column width="50%"}
-### AdamW
-Uses the Adam update with **decoupled weight decay**.
-
-A common baseline for training modern neural networks.
-:::
-:::
-
-::: {.takeaway}
-Adaptive scaling helps, but it does not automatically capture the role of each layer.
-:::
-
-## Changing the geometry
-
-::: {.columns}
-::: {.column width="33%"}
-### Linear oracle
-A **linear minimization oracle** (LMO) finds the best direction for a linear objective over a chosen feasible set.
-:::
-::: {.column width="33%"}
-### Frank–Wolfe
-Uses an LMO to optimize over a constrained set, avoiding an explicit projection step.
-:::
-::: {.column width="33%"}
-### Mirror descent
-Uses a geometry defined by a potential and its Bregman divergence to form updates.
-:::
-:::
-
-::: {.takeaway}
-**Modular duality:** choose layer-aware norms and combine them into an architecture-aware update.
-:::
-
-::: notes
-These are related geometry-aware tools, not interchangeable algorithms. Frank–Wolfe is a constrained method; modular duality uses duality maps. See Bernstein & Newhouse, Modular Duality in Deep Learning, 2024; Jaggi, 2013.
-:::
-
-## Bregman divergence and mirror descent
+$$D_\psi(x,y)=\psi(x)-\psi(y)-\langle\nabla\psi(y),x-y\rangle.$$
 
 ::: {.columns}
 ::: {.column width="55%"}
-For a convex potential $\psi$, the divergence is the gap above its tangent at $y$:
+$$x_{t+1}=\arg\min_{x\in C}\left\{\eta\langle g_t,x\rangle+D_\psi(x,x_t)\right\}.$$
 
-$$D_{\psi}(x,y)=\psi(x)-\psi(y)-\langle\nabla\psi(y),x-y\rangle$$
-
-**Quadratic potential:** $\psi(x)=\tfrac12\|x\|_2^2$ gives $D_{\psi}(x,y)=\tfrac12\|x-y\|_2^2$.
-
-**Mirror descent** balances a linearized loss against this divergence from the current point.
+Without constraints, $\nabla\psi(x_{t+1})=\nabla\psi(x_t)-\eta g_t$: update in **dual coordinates**, then map back via $(\nabla\psi)^{-1}$.
 :::
 ::: {.column width="45%"}
-![Bregman divergence illustrated as the gap between a convex potential and its tangent](bregman.svg){width="100%"}
+![Bregman divergence as tangent gap](bregman.svg){width="100%"}
 :::
 :::
 
-::: {.takeaway}
-Different potentials give different geometries; a Bregman divergence need not be symmetric.
+::: {.source}
+Sources: [Bubeck, §§4.1–4.3](https://arxiv.org/abs/1405.4980); [Reid, Bregman divergences](https://mark.reid.name/blog/meet-the-bregman-divergences.html).
 :::
 
-::: notes
-Mirror descent can be written as the minimization over the feasible set of the gradient's linear model plus D_psi(x, x_t)/eta. With a quadratic potential and no constraints, it recovers gradient descent. Differentiability is required at the reference point; convexity makes the divergence nonnegative.
+## Frank–Wolfe and the linear minimization oracle
+
+Given a compact convex feasible set $C$, define
+
+$$s_t\in\operatorname{LMO}_C(g_t)=\arg\min_{s\in C}\langle g_t,s\rangle.$$
+
+The Frank–Wolfe update is
+
+$$x_{t+1}=(1-\gamma_t)x_t+\gamma_t s_t,\qquad 0\leq\gamma_t\leq1.$$
+
+The LMO selects a point minimizing the linearized objective over $C$; the update remains feasible without a projection.
+
+::: {.source}
+Source: [Jaggi, Revisiting Frank–Wolfe, Algorithm 1](https://proceedings.mlr.press/v28/jaggi13.html).
 :::
 
-## Muon: a matrix-aware example
+## Modular norms: geometry by layer
 
-::: {.columns}
-::: {.column width="55%"}
-1. Accumulate a momentum matrix from the gradient.
-2. Approximately orthogonalize that matrix.
-3. Apply a scaled update to matrix weights.
+For input norm $\|\cdot\|_\alpha$ and output norm $\|\cdot\|_\beta$:
 
-Other parameters can use a different optimizer, such as AdamW.
-:::
-::: {.column width="45%"}
-### Why it matters
+$$\|W\|_{\alpha\to\beta}=\sup_{\|x\|_\alpha\leq1}\|Wx\|_\beta.$$
 
-The update acts on a **matrix as a whole**, reflecting its geometry rather than independently scaling every coordinate.
-:::
-:::
+| Module | Layer norm in the paper | Dualized gradient direction |
+|:--|:--|:--|
+| Linear | RMS $\to$ RMS operator norm | scaled polar factor $UV^\top$ |
+| Embed | $\ell_1\to$ RMS operator norm | normalize gradient columns by RMS |
+| Conv2D | $k^2$ times max slice RMS $\to$ RMS norm | scaled polar factor per kernel slice |
 
-::: {.takeaway}
-Muon motivates the question: **what geometry fits each architectural component?**
+A unit-ball LMO is homogeneous of degree zero in $g$; a squared-norm duality map includes gradient magnitude. The two should not be conflated.
+
+::: {.source}
+Source: [Bernstein & Newhouse, Modular Duality in Deep Learning, Table 1](https://arxiv.org/abs/2410.21265); normalized directions shown, see paper for scaling and zero-gradient conventions.
 :::
 
-::: notes
-Muon implementations vary in scaling and which parameters they apply to. The polar-factor interpretation motivates a connection to spectral geometry; it is not a claim that every Muon variant is an exact optimizer for every architecture.
+## Muon
+
+![Muon algorithm from Keller Jordan's original post](https://kellerjordan.github.io/images/muon/muon_algo.png){width="74%"}
+
+Other parameters can use a different optimizer such as AdamW.
+
+::: {.source}
+Source: [Keller Jordan, Muon](https://kellerjordan.github.io/posts/muon/). The algorithm image requires an internet connection.
+:::
+
+## Does Muon scale?
+
+### Yes: reported large-model examples
+
+- **Moonlight:** 16B total / 3B active parameters; trained using a scaled Muon variant.
+- **Kimi K2:** 1T total parameters; pre-trained with **MuonClip**, a Muon variant.
+
+These are reported model-training results, not a guarantee that every Muon implementation scales identically.
+
+::: {.source}
+Sources: [Moonshot AI, Muon is Scalable for LLM Training](https://arxiv.org/abs/2502.16982); [Kimi K2 technical report](https://github.com/MoonshotAI/Kimi-K2).
 :::
 
 ## Research question
 
-### Can we design efficient updates from norms adapted to a model's components?
+### What norms and updates fit modern architectures?
 
-::: {.columns}
-::: {.column width="50%"}
-**Start from existing results**
+- **Attention:** multi-head, multi-head latent attention (MLA), sparse attention and residual connections.
+- **Recent examples:** DeepSeek Sparse Attention and compressed/sparse attention variants.
+- **State-space models:** architectures such as Mamba.
+- **Compositions:** how do useful layer geometries interact across a network?
 
-- Linear layers and embeddings have distinct roles.
-- Existing work derives candidate layerwise norms and duality maps.
-:::
-::: {.column width="50%"}
-**Investigate new settings**
-
-- Attention: heads, variants, and residual connections.
-- State-space architectures such as Mamba.
-- Other widely used modules and compositions.
-:::
-:::
-
-::: {.takeaway}
-The appropriate norm is a **hypothesis to derive and test**, not a universal choice.
+::: {.source}
+Examples: [DeepSeek-V3.2](https://arxiv.org/abs/2512.02556); [Mamba](https://arxiv.org/abs/2312.00752). Residual connections are an architectural composition, not an attention mechanism.
 :::
 
 ## Goals and evaluation
 
-1. **Theory** — derive candidate norms and practical updates; study convergence under explicit assumptions.
-2. **Experiments** — compare against SGD, AdamW, and Muon on controlled training tasks.
-3. **Speed** — aim for a competitive optimizer on the modded NanoGPT speedrun, under its applicable rules.
-4. **Usability** — explore PyTorch-compatible modules and optimizer tooling that select appropriate geometry.
+1. **Theory** — derive candidate layer norms, duality maps and efficient updates; study convergence under explicit assumptions.
+2. **Experiments** — compare against SGD, AdamW and Muon with controlled tuning and compute budgets.
+3. **Speed** — aim for a competitive optimizer on the modded NanoGPT speedrun, under the applicable rules.
+4. **Usability** — develop PyTorch-compatible modules and optimizer tooling: users build models with familiar layers, while the optimizer associates supported parameters with the appropriate candidate geometry.
 
 ::: notes
-Compare training quality, time to target, memory, compute and sensitivity to tuning. A usable library and speedrun competitiveness are ambitions, not established results. Benchmark rules must be checked when the experiment is run.
-:::
-
-## Methods
-
-::: {.columns}
-::: {.column width="50%"}
-### Mathematical analysis
-
-- Study how layer operations shape useful norms.
-- Derive candidate updates and examine their computational cost.
-- Prove properties under explicit assumptions where possible.
-:::
-::: {.column width="50%"}
-### Experimental evaluation
-
-- Implement candidates in Python and PyTorch.
-- Compare to established baselines under matched budgets.
-- Measure loss, time to target, memory, and sensitivity to tuning.
-:::
-:::
-
-::: {.takeaway}
-Use the results to refine both the theory and the implementation.
+The API, norm selection and speedrun performance are proposed goals, not established results. Compare loss, time to target, memory and sensitivity to tuning.
 :::
 
 ## A three-year plan
@@ -226,9 +194,9 @@ Use the results to refine both the theory and the implementation.
 ### Year 1
 **Build foundations**
 
-- Master geometry and optimizer literature.
+- Study geometry and optimizer literature.
 - Reproduce baselines and set up benchmarks.
-- Identify promising layer-level questions.
+- Identify promising layer-level norms.
 :::
 ::: {.column width="33%"}
 ### Year 2
@@ -248,44 +216,26 @@ Use the results to refine both the theory and the implementation.
 :::
 :::
 
-::: notes
-This is a proposed plan, subject to the project's scope, resources, and research findings. The three-year duration is the user's stated ambition.
-:::
-
-## Why this topic? Where next?
+## Motivation and professional ambitions
 
 ::: {.columns}
 ::: {.column width="50%"}
 ### Motivation
 
-- Connect mathematics with real deep learning systems.
-- Understand how architecture changes optimization.
-- Build methods that others can use.
+- Understand the geometry behind deep learning, instead of treating optimizers as black boxes.
+- Connect mathematics with deep learning systems.
+- Develop state-of-the-art optimizers.
 :::
 ::: {.column width="50%"}
 ### Professional ambitions
 
-- Join an AI research lab or startup—or build a startup.
+- Join an AI research lab or startup—or create a startup.
 - Explore AI and LLMs as research tools to work faster and investigate deeper questions.
 :::
 :::
-
-::: {.takeaway}
-My goal: combine **theory, experiments, and useful tools**.
-:::
-
-## References {.smaller}
-
-- Bernstein & Newhouse, *Modular Duality in Deep Learning*, 2024. [arXiv:2410.21265](https://arxiv.org/abs/2410.21265)
-- Bernstein & Newhouse, *Old Optimizer, New Norm: An Anthology*, 2024. [arXiv:2409.20325](https://arxiv.org/abs/2409.20325)
-- Kingma & Ba, *Adam: A Method for Stochastic Optimization*, 2015. [arXiv:1412.6980](https://arxiv.org/abs/1412.6980)
-- Loshchilov & Hutter, *Decoupled Weight Decay Regularization*, 2019. [arXiv:1711.05101](https://arxiv.org/abs/1711.05101)
-- Jaggi, *Revisiting Frank-Wolfe: Projection-Free Sparse Convex Optimization*, 2013. [PMLR](https://proceedings.mlr.press/v28/jaggi13.html)
-- Keller Jordan et al., *Muon: An optimizer for hidden layers in neural networks*, 2024. [Project](https://kellerjordan.github.io/posts/muon/)
 
 ## Thank you
 
 ### Questions and discussion
 
 Mathéo Le Dévéhat · CVN
-

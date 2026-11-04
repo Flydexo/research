@@ -24,7 +24,7 @@ fig, ax = plt.subplots(figsize=(6.2, 4.1), layout="constrained")
 ax.plot(steps, loss, color=BLUE, lw=1.6, alpha=.65)
 ax.plot(steps, trend, color=TEAL, lw=2.5, label="Underlying trend")
 ax.set(xlabel="Training step", ylabel="Loss", title="Example training loss")
-ax.text(.98, .94, "Synthetic illustration", transform=ax.transAxes, ha="right", va="top", color="#68768a", fontsize=10)
+
 ax.grid(axis="y", color="#e6e9f1")
 ax.set_xlim(0, 240)
 ax.set_ylim(bottom=0)
