@@ -34,7 +34,7 @@ for x, y in train_loader:
 The optimizer turns gradients into parameter updates.
 :::
 ::: {.column width="47%"}
-![Illustrative training loss; not experimental data](loss.svg){width="100%"}
+![Synthetic training loss; no training was run](loss.svg){width="100%"}
 :::
 :::
 
@@ -43,7 +43,7 @@ The optimizer turns gradients into parameter updates.
 :::
 
 ::: notes
-The curve is an illustration, not a measured training run. Loss may fluctuate in practice.
+The curve is synthetic: no training was run. Loss may fluctuate in practice.
 :::
 
 ## Gradient descent and SGD
@@ -113,22 +113,18 @@ These are related geometry-aware tools, not interchangeable algorithms. Frank–
 
 ## Bregman divergence and mirror descent
 
-For a differentiable convex potential $\psi$, the **Bregman divergence** measures the gap between $\psi(x)$ and its linear approximation at $y$:
-
-$$D_{\psi}(x,y) = \psi(x)-\psi(y)-\langle\nabla\psi(y), x-y\rangle$$
-
 ::: {.columns}
-::: {.column width="50%"}
-### Euclidean example
+::: {.column width="55%"}
+For a convex potential $\psi$, the divergence is the gap above its tangent at $y$:
 
-For $\psi(x)=\tfrac12\|x\|_2^2$,
+$$D_{\psi}(x,y)=\psi(x)-\psi(y)-\langle\nabla\psi(y),x-y\rangle$$
 
-$$D_{\psi}(x,y)=\tfrac12\|x-y\|_2^2.$$
+**Quadratic potential:** $\psi(x)=\tfrac12\|x\|_2^2$ gives $D_{\psi}(x,y)=\tfrac12\|x-y\|_2^2$.
+
+**Mirror descent** balances a linearized loss against this divergence from the current point.
 :::
-::: {.column width="50%"}
-### Mirror descent
-
-Chooses an update by balancing a linearized loss against the Bregman divergence from the current point.
+::: {.column width="45%"}
+![Bregman divergence illustrated as the gap between a convex potential and its tangent](bregman.svg){width="100%"}
 :::
 :::
 
