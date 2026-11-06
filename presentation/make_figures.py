@@ -57,17 +57,3 @@ plt.close(fig)
 for name in ("loss.svg", "bregman.svg"):
     path = OUT / name
     path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
-
-# Decorative convex surface: drawn separately from any experimental claim.
-fig = plt.figure(figsize=(8, 6), facecolor="none")
-ax = fig.add_subplot(projection="3d", facecolor="none")
-grid = np.linspace(-2, 2, 23)
-xx, yy = np.meshgrid(grid, grid)
-zz = .35 * xx**2 + .55 * yy**2
-ax.plot_wireframe(xx, yy, zz, rstride=1, cstride=1, color="#a7b76a", linewidth=.55, alpha=.6)
-ax.view_init(elev=23, azim=-62)
-ax.set_axis_off()
-fig.savefig(OUT / "surface.svg", transparent=True, bbox_inches="tight", pad_inches=0)
-plt.close(fig)
-p = OUT / "surface.svg"
-p.write_text("\n".join(line.rstrip() for line in p.read_text().splitlines()) + "\n")
