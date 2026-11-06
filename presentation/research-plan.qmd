@@ -1,7 +1,7 @@
 ---
 format:
   revealjs:
-    theme: white
+    theme: [white, custom.scss]
     center: true
     slide-number: true
     progress: true
@@ -13,7 +13,7 @@ format:
     highlight-style: github
 ---
 
-## Non-Euclidean Optimization Methods for Machine Learning
+## Non-Euclidean Optimization Methods for Machine Learning {.opening}
 
 ### Mathéo Le Dévéhat
 
@@ -233,4 +233,4 @@ The API, norm selection and speedrun performance are proposed goals, not establi
 :::
 :::
 
-## <span style="display:block;text-align:center">Thank you</span>
+## <span style="display:block;text-align:center">Thank you</span> {.closing}
