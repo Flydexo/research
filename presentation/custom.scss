@@ -23,3 +23,8 @@ $presentation-font-size-root: 27px;
 .reveal .closing h2 { border: 0; font-size: 2.5em; text-align: center; }
 .reveal .slide-number { color: #555555; background: transparent; }
 .reveal .progress { color: #2a76dd; }
+
+.reveal .mirror-layout { font-size: .78em; gap: 2em; }
+.reveal .mirror-layout p { margin: .42em 0; line-height: 1.22; }
+.reveal .mirror-layout .MathJax_Display { margin: .25em 0 !important; }
+.reveal .mirror-source { font-size: .43em; margin-top: .8em; }

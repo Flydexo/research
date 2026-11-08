@@ -100,7 +100,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="research-plan_files/libs/revealjs/dist/theme/quarto-42a2e348295e9425fd062aaf565e658c.css">
+  <link rel="stylesheet" href="research-plan_files/libs/revealjs/dist/theme/quarto-f87fd5836d89e887ba021357806139db.css">
   <link href="research-plan_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="research-plan_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="research-plan_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -269,16 +269,41 @@ v_t&amp;=\beta_2v_{t-1}+(1-\beta_2)g_t^{\odot 2},\\
 </section>
 <section id="mirror-descent" class="slide level2 center">
 <h2>Mirror descent</h2>
-<div style="font-size: 0.68em;">
-<p><strong>Geometry.</strong> The differential <span class="math inline">\(g_t\in V^*\)</span> acts on parameter displacements in <span class="math inline">\(V\)</span>; adding them directly is a type or homogeneity mismatch. A geometry maps dual to primal; the Euclidean inner product provides such an identification.</p>
-<p><strong>Primal update.</strong> For a convex feasible set <span class="math inline">\(C\)</span> and potential <span class="math inline">\(\psi\)</span>,</p>
+<div class="columns mirror-layout">
+<div class="column" style="width:50%;">
+<p><strong>Geometry.</strong> The gradient <span class="math inline">\(g_t\in V^*\)</span> is a dual vector; a geometry maps it to the primal space <span class="math inline">\(V\)</span> before updating parameters.</p>
+<p><strong>Primal update.</strong> For a feasible set <span class="math inline">\(C\)</span> and potential <span class="math inline">\(\psi\)</span>:</p>
 <p><span class="math display">\[x_{t+1}=\arg\min_{x\in C}\{\eta\langle g_t,x\rangle+D_\psi(x,x_t)\}.\]</span></p>
-<p><strong>Bregman divergence.</strong> <span class="math inline">\(D_\psi(x,y)=\psi(x)-\psi(y)-\langle\nabla\psi(y),x-y\rangle\)</span>. On the probability simplex, negative entropy <span class="math inline">\(\psi(x)=\sum_i x_i\log x_i\)</span> gives <span class="math inline">\(D_\psi(x,y)=D_{\mathrm{KL}}(x\|y)\)</span>.</p>
-<p><strong>Dual coordinates.</strong> In the unconstrained case, when the mirror map is invertible and the iterates are in its domain,</p>
-<p><span class="math display">\[z_t=\nabla\psi(x_t),\quad z_{t+1}=z_t-\eta g_t,\quad x_{t+1}=\nabla\psi^*(z_{t+1}).\]</span></p>
-<p><strong>Norm-based dualizer.</strong> <span class="math inline">\(\operatorname{dualize}_{\|\cdot\|}(g)\in\arg\max_{\|u\|=1}\langle g,u\rangle\)</span> (<span class="math inline">\(g\ne0\)</span>). This is the modular-duality paper’s unit-direction map, distinct from <span class="math inline">\(\nabla\psi^*\)</span>.</p>
-<p><a href="https://arxiv.org/abs/1405.4980">Sources: Bubeck, §§4.1–4.3</a>; <a href="https://arxiv.org/abs/2410.21265">Bernstein &amp; Newhouse, Definitions 1–2</a>.</p>
+<p><strong>Bregman divergence.</strong></p>
+<p><span class="math display">\[D_\psi(x,y)=\psi(x)-\psi(y)-\langle\nabla\psi(y),x-y\rangle.\]</span></p>
+<p>Negative entropy on the probability simplex gives <span class="math inline">\(D_\psi(x,y)=D_{\rm KL}(x\|y)\)</span>.</p>
+</div><div class="column" style="width:50%;">
+<p><strong>Dual coordinates.</strong> Unconstrained mirror descent updates in dual space and maps back:</p>
+<p><span class="math display">\[\begin{aligned}
+z_t&amp;=\nabla\psi(x_t),\\
+z_{t+1}&amp;=z_t-\eta g_t,\\
+x_{t+1}&amp;=\nabla\psi^*(z_{t+1}).
+\end{aligned}\]</span></p>
+<p><strong>Norm-based dualizer.</strong> For <span class="math inline">\(g\ne0\)</span>,</p>
+<p><span class="math display">\[\operatorname{dualize}_{\|\cdot\|}(g)\in\arg\max_{\|u\|=1}\langle g,u\rangle.\]</span></p>
+<p>This unit-direction map is distinct from <span class="math inline">\(\nabla\psi^*\)</span>.</p>
+</div></div>
+<div class="mirror-source">
+<p>Sources: <a href="https://arxiv.org/abs/1405.4980">Bubeck, §§4.1–4.3</a>; <a href="https://arxiv.org/abs/2410.21265">Bernstein &amp; Newhouse, Definitions 1–2</a>.</p>
 </div>
+<aside class="notes">
+<p>The dual-coordinate expression assumes an invertible mirror map and iterates in its domain. Negative entropy gives KL divergence on the probability simplex. The gradient is a covector; direct addition without a primal-dual identification is a type mismatch.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="frankwolfe-and-the-linear-minimization-oracle" class="slide level2 center">
 <h2>Frank–Wolfe and the linear minimization oracle</h2>

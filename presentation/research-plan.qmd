@@ -88,22 +88,43 @@ Sources: [Kingma & Ba, Adam](https://arxiv.org/abs/1412.6980); [Loshchilov & Hut
 
 ## Mirror descent
 
-::: {style="font-size: 0.68em;"}
-**Geometry.** The differential $g_t\in V^*$ acts on parameter displacements in $V$; adding them directly is a type or homogeneity mismatch. A geometry maps dual to primal; the Euclidean inner product provides such an identification.
+::: {.columns .mirror-layout}
+::: {.column width="50%"}
+**Geometry.** The gradient $g_t\in V^*$ is a dual vector; a geometry maps it to the primal space $V$ before updating parameters.
 
-**Primal update.** For a convex feasible set $C$ and potential $\psi$,
+**Primal update.** For a feasible set $C$ and potential $\psi$:
 
 $$x_{t+1}=\arg\min_{x\in C}\{\eta\langle g_t,x\rangle+D_\psi(x,x_t)\}.$$
 
-**Bregman divergence.** $D_\psi(x,y)=\psi(x)-\psi(y)-\langle\nabla\psi(y),x-y\rangle$. On the probability simplex, negative entropy $\psi(x)=\sum_i x_i\log x_i$ gives $D_\psi(x,y)=D_{\mathrm{KL}}(x\|y)$.
+**Bregman divergence.**
 
-**Dual coordinates.** In the unconstrained case, when the mirror map is invertible and the iterates are in its domain,
+$$D_\psi(x,y)=\psi(x)-\psi(y)-\langle\nabla\psi(y),x-y\rangle.$$
 
-$$z_t=\nabla\psi(x_t),\quad z_{t+1}=z_t-\eta g_t,\quad x_{t+1}=\nabla\psi^*(z_{t+1}).$$
+Negative entropy on the probability simplex gives $D_\psi(x,y)=D_{\rm KL}(x\|y)$.
+:::
+::: {.column width="50%"}
+**Dual coordinates.** Unconstrained mirror descent updates in dual space and maps back:
 
-**Norm-based dualizer.** $\operatorname{dualize}_{\|\cdot\|}(g)\in\arg\max_{\|u\|=1}\langle g,u\rangle$ ($g\ne0$). This is the modular-duality paper's unit-direction map, distinct from $\nabla\psi^*$.
+$$\begin{aligned}
+z_t&=\nabla\psi(x_t),\\
+z_{t+1}&=z_t-\eta g_t,\\
+x_{t+1}&=\nabla\psi^*(z_{t+1}).
+\end{aligned}$$
 
-[Sources: Bubeck, §§4.1–4.3](https://arxiv.org/abs/1405.4980); [Bernstein & Newhouse, Definitions 1–2](https://arxiv.org/abs/2410.21265).
+**Norm-based dualizer.** For $g\ne0$,
+
+$$\operatorname{dualize}_{\|\cdot\|}(g)\in\arg\max_{\|u\|=1}\langle g,u\rangle.$$
+
+This unit-direction map is distinct from $\nabla\psi^*$.
+:::
+:::
+
+::: {.mirror-source}
+Sources: [Bubeck, §§4.1–4.3](https://arxiv.org/abs/1405.4980); [Bernstein & Newhouse, Definitions 1–2](https://arxiv.org/abs/2410.21265).
+:::
+
+::: notes
+The dual-coordinate expression assumes an invertible mirror map and iterates in its domain. Negative entropy gives KL divergence on the probability simplex. The gradient is a covector; direct addition without a primal-dual identification is a type mismatch.
 :::
 
 ## Frank–Wolfe and the linear minimization oracle
