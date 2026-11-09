@@ -92,15 +92,6 @@ Sources: [Kingma & Ba, Adam](https://arxiv.org/abs/1412.6980); [Loshchilov & Hut
 ::: {.column width="50%"}
 **Geometry.** The gradient $g_t\in V^*$ is a dual vector; a geometry maps it to the primal space $V$ before updating parameters.
 
-**Primal update.** For a feasible set $C$ and potential $\psi$:
-
-$$x_{t+1}=\arg\min_{x\in C}\{\eta\langle g_t,x\rangle+D_\psi(x,x_t)\}.$$
-
-**Bregman divergence.**
-
-$$D_\psi(x,y)=\psi(x)-\psi(y)-\langle\nabla\psi(y),x-y\rangle.$$
-
-Negative entropy on the probability simplex gives $D_\psi(x,y)=D_{\rm KL}(x\|y)$.
 :::
 ::: {.column width="50%"}
 **Dual coordinates.** Unconstrained mirror descent updates in dual space and maps back:
@@ -124,7 +115,7 @@ Sources: [Bubeck, §§4.1–4.3](https://arxiv.org/abs/1405.4980); [Bernstein & 
 :::
 
 ::: notes
-The dual-coordinate expression assumes an invertible mirror map and iterates in its domain. Negative entropy gives KL divergence on the probability simplex. The gradient is a covector; direct addition without a primal-dual identification is a type mismatch.
+The dual-coordinate expression assumes an invertible mirror map and iterates in its domain. The gradient is a covector; direct addition without a primal-dual identification is a type mismatch.
 :::
 
 ## Frank–Wolfe and the linear minimization oracle

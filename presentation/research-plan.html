@@ -272,11 +272,6 @@ v_t&amp;=\beta_2v_{t-1}+(1-\beta_2)g_t^{\odot 2},\\
 <div class="columns mirror-layout">
 <div class="column" style="width:50%;">
 <p><strong>Geometry.</strong> The gradient <span class="math inline">\(g_t\in V^*\)</span> is a dual vector; a geometry maps it to the primal space <span class="math inline">\(V\)</span> before updating parameters.</p>
-<p><strong>Primal update.</strong> For a feasible set <span class="math inline">\(C\)</span> and potential <span class="math inline">\(\psi\)</span>:</p>
-<p><span class="math display">\[x_{t+1}=\arg\min_{x\in C}\{\eta\langle g_t,x\rangle+D_\psi(x,x_t)\}.\]</span></p>
-<p><strong>Bregman divergence.</strong></p>
-<p><span class="math display">\[D_\psi(x,y)=\psi(x)-\psi(y)-\langle\nabla\psi(y),x-y\rangle.\]</span></p>
-<p>Negative entropy on the probability simplex gives <span class="math inline">\(D_\psi(x,y)=D_{\rm KL}(x\|y)\)</span>.</p>
 </div><div class="column" style="width:50%;">
 <p><strong>Dual coordinates.</strong> Unconstrained mirror descent updates in dual space and maps back:</p>
 <p><span class="math display">\[\begin{aligned}
@@ -292,7 +287,7 @@ x_{t+1}&amp;=\nabla\psi^*(z_{t+1}).
 <p>Sources: <a href="https://arxiv.org/abs/1405.4980">Bubeck, §§4.1–4.3</a>; <a href="https://arxiv.org/abs/2410.21265">Bernstein &amp; Newhouse, Definitions 1–2</a>.</p>
 </div>
 <aside class="notes">
-<p>The dual-coordinate expression assumes an invertible mirror map and iterates in its domain. Negative entropy gives KL divergence on the probability simplex. The gradient is a covector; direct addition without a primal-dual identification is a type mismatch.</p>
+<p>The dual-coordinate expression assumes an invertible mirror map and iterates in its domain. The gradient is a covector; direct addition without a primal-dual identification is a type mismatch.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
