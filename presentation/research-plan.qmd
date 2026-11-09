@@ -2,7 +2,7 @@
 format:
   revealjs:
     theme: [white, custom.scss]
-    center: true
+    center: false
     slide-number: true
     progress: true
     transition: fade
@@ -82,18 +82,15 @@ $$\begin{aligned}
 
 $m_t$: momentum; $v_t$: squared-gradient average; $\epsilon$: numerical stabilizer. Operations are coordinate-wise.
 
-::: {style="font-size: 0.48em;"}
+::: {.slide-source}
 Sources: [Kingma & Ba, Adam](https://arxiv.org/abs/1412.6980); [Loshchilov & Hutter, AdamW](https://arxiv.org/abs/1711.05101). Adam shown without L2 regularization; AdamW uses decoupled decay.
 :::
 
 ## Mirror descent
 
-::: {.columns .mirror-layout}
-::: {.column width="50%"}
+::: {.mirror-layout}
 **Geometry.** The gradient $g_t\in V^*$ is a dual vector; a geometry maps it to the primal space $V$ before updating parameters.
 
-:::
-::: {.column width="50%"}
 **Dual coordinates.** Unconstrained mirror descent updates in dual space and maps back:
 
 $$\begin{aligned}
@@ -108,9 +105,8 @@ $$\operatorname{dualize}_{\|\cdot\|}(g)\in\arg\max_{\|u\|=1}\langle g,u\rangle.$
 
 This unit-direction map is distinct from $\nabla\psi^*$.
 :::
-:::
 
-::: {.mirror-source}
+::: {.slide-source}
 Sources: [Bubeck, §§4.1–4.3](https://arxiv.org/abs/1405.4980); [Bernstein & Newhouse, Definitions 1–2](https://arxiv.org/abs/2410.21265).
 :::
 
@@ -130,7 +126,7 @@ $$x_{t+1}=(1-\gamma_t)x_t+\gamma_t s_t,\qquad 0\leq\gamma_t\leq1.$$
 
 The LMO selects a point minimizing the linearized objective over $C$; the update remains feasible without a projection.
 
-::: {style="font-size: 0.48em;"}
+::: {.slide-source}
 Source: [Jaggi, Revisiting Frank–Wolfe, Algorithm 1](https://proceedings.mlr.press/v28/jaggi13.html).
 :::
 
@@ -148,7 +144,7 @@ It measures the largest output magnitude produced by an input in the unit ball.
 
 Choose layer norms from their input and output roles, then derive a dualizer for each module.
 
-::: {style="font-size: 0.48em;"}
+::: {.slide-source}
 Source: [Bernstein & Newhouse, Definition 3](https://arxiv.org/abs/2410.21265).
 :::
 
@@ -158,7 +154,7 @@ Source: [Bernstein & Newhouse, Definition 3](https://arxiv.org/abs/2410.21265).
 
 $G=U\Sigma V^\top$ denotes a reduced SVD; the paper specifies the exact scaling and conventions.
 
-::: {style="font-size: 0.48em;"}
+::: {.slide-source}
 Source: [Bernstein & Newhouse, Modular Duality in Deep Learning, Table 1, p. 7](https://arxiv.org/abs/2410.21265).
 :::
 
@@ -168,7 +164,7 @@ Source: [Bernstein & Newhouse, Modular Duality in Deep Learning, Table 1, p. 7](
 
 Other parameters can use a different optimizer such as AdamW.
 
-::: {style="font-size: 0.48em;"}
+::: {.slide-source}
 Source: [Keller Jordan, Muon](https://kellerjordan.github.io/posts/muon/). The algorithm image requires an internet connection.
 :::
 
@@ -183,7 +179,7 @@ $$A_k=X_kX_k^\top,\qquad X_{k+1}=aX_k+(bA_k+cA_k^2)X_k.$$
 
 **At scale:** Kimi K3 and DeepSeek-V4.1-Flash use Muon variants. Mistral Large 4 used Muon in RL post-training and AdamW in pretraining.
 
-::: {style="font-size: 0.48em;"}
+::: {.slide-source}
 Sources: [Jordan](https://kellerjordan.github.io/posts/muon/), [Kimi K3](https://github.com/MoonshotAI/Kimi-K3), [DeepSeek-V4.1](https://arxiv.org/html/2609.19969), [Mistral Large 4, §§2 and 4.4.1](https://www.alphaxiv.org/pdf/2611.mistral-large-4).
 :::
 
