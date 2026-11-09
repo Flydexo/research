@@ -16,16 +16,15 @@ $presentation-font-size-root: 27px;
 .reveal pre { width: 100%; font-size: .58em; box-shadow: none; }
 .reveal pre code { padding: 1em; border-radius: 3px; }
 .reveal .columns { gap: 1.5em; align-items: flex-start; }
-.reveal .opening h2 { border: 0; font-size: 1.65em; max-width: 80%; line-height: 1.05; letter-spacing: -.055em; margin-bottom: 1em; }
+.reveal .opening h2 { border: 0; }
 .reveal .opening h3 { margin-top: 1.7em; }
-.reveal .opening p { font-size: .8em; color: #555555; }
+.reveal .opening p { color: #555555; }
 .reveal .loop { align-items: center; }
 .reveal .loop pre { margin-top: 2em; }
-.reveal .closing h2 { border: 0; font-size: 2.5em; text-align: center; }
+.reveal .closing h2 { border: 0; text-align: center; }
 .reveal .slide-number { color: #555555; background: transparent; }
 .reveal .progress { color: #2a76dd; }
 
-.reveal .mirror-layout { font-size: .78em; }
 .reveal .mirror-layout p { margin: .42em 0; line-height: 1.22; }
 .reveal .mirror-layout .MathJax_Display { margin: .25em 0 !important; }
 .reveal .slide-source { position: absolute; left: 0; right: 0; bottom: .4em; font-size: .48em; line-height: 1.25; }
